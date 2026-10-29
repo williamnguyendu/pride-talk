@@ -93,7 +93,7 @@
   <main id="main-content" class="flex-grow hidden w-full max-w-6xl mx-auto px-4 sm:px-6 py-12">
     
     <!-- Header -->
-    <header class="text-center mb-14 animate-slide-up-fade">
+    <header class="text-center mb-16 animate-slide-up-fade relative">
       <div class="inline-flex items-center justify-center px-4 py-1.5 mb-5 rounded-full bg-white border border-fuchsia-100 shadow-sm">
         <span class="flex w-2 h-2 rounded-full bg-brand-primary mr-2 animate-pulse"></span>
         <span class="text-xs font-semibold text-brand-primary tracking-wider uppercase">Sự kiện đang mở đăng ký</span>
@@ -103,10 +103,30 @@
         Pride <span class="gradient-text">Talk</span>
       </h1>
       
-      <!-- Bổ sung hiển thị Tên Chủ Đề -->
-      <h2 id="event-title" class="text-2xl md:text-4xl font-bold text-gray-700 mb-5 leading-tight px-4"></h2>
+      <h2 id="event-title" class="text-2xl md:text-4xl font-bold text-gray-700 mb-6 leading-tight px-4"></h2>
       
-      <p id="event-desc" class="text-gray-500 text-lg max-w-2xl mx-auto font-light leading-relaxed"></p>
+      <!-- BOX MÔ TẢ (Linh động xử lý dài ngắn) -->
+      <div class="max-w-3xl mx-auto relative z-10 px-2">
+        <div class="bg-white/60 backdrop-blur-lg rounded-3xl p-6 md:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white relative">
+          <!-- Quote icon trang trí mờ -->
+          <i class="fa-solid fa-quote-left absolute top-4 left-6 text-4xl text-fuchsia-200 opacity-30 -z-10"></i>
+          
+          <div id="desc-wrapper" class="relative overflow-hidden transition-[max-height] duration-500 ease-in-out" style="max-height: 120px;">
+            <p id="event-desc" class="text-gray-600 text-base md:text-lg font-light leading-relaxed whitespace-pre-line text-left md:text-center z-10 relative"></p>
+          </div>
+          
+          <!-- Gradient che mờ phần text bị ẩn (Chỉ hiện khi text dài) -->
+          <div id="desc-gradient" class="absolute bottom-0 left-0 w-full h-20 bg-gradient-to-t from-[#fcf9fb] to-transparent pointer-events-none transition-opacity duration-300 hidden rounded-b-3xl"></div>
+        </div>
+        
+        <!-- Nút Xem Thêm (Chỉ hiện khi text dài) -->
+        <div class="text-center -mt-4 relative z-20">
+          <button type="button" id="btn-read-more" class="hidden inline-flex items-center justify-center px-5 py-2 bg-white border border-fuchsia-100 shadow-md rounded-full text-sm font-semibold text-brand-secondary hover:text-brand-primary hover:shadow-lg transition-all transform hover:-translate-y-0.5">
+            <span id="read-more-text">Xem thêm nội dung</span>
+            <i id="read-more-icon" class="fa-solid fa-chevron-down ml-2 transition-transform duration-300"></i>
+          </button>
+        </div>
+      </div>
     </header>
 
     <!-- Cards Thông tin -->
@@ -170,21 +190,16 @@
       <div class="lg:col-span-7 order-1 lg:order-2">
         <div class="bg-white rounded-3xl p-8 md:p-10 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] relative overflow-hidden">
           
-          <!-- Họa tiết góc Form -->
           <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-brand-light to-transparent rounded-bl-full pointer-events-none"></div>
 
-          <!-- ANIMATION DỄ THƯƠNG (Hoạt ảnh nổi bật ở đầu form) -->
+          <!-- ANIMATION DỄ THƯƠNG TRÊN FORM -->
           <div class="flex flex-col items-center justify-center mb-8">
             <div class="relative">
-              <!-- Khối bong bóng bay lơ lửng -->
               <div class="w-20 h-20 bg-fuchsia-50 rounded-full flex items-center justify-center relative shadow-sm border-2 border-white animate-float z-10">
                 <i class="fa-solid fa-comments text-4xl text-brand-secondary"></i>
-                <!-- Trái tim đập -->
                 <i class="fa-solid fa-heart absolute -top-1 -right-2 text-2xl text-pink-500 animate-heart-beat"></i>
-                <!-- Ngôi sao xoay -->
                 <i class="fa-solid fa-sparkles absolute -bottom-1 -left-2 text-xl text-yellow-400 animate-[spin_4s_linear_infinite]"></i>
               </div>
-              <!-- Bóng mờ chuyển động theo -->
               <div class="w-12 h-2 bg-gray-200 rounded-[100%] mx-auto mt-4 animate-float-shadow"></div>
             </div>
             <h3 class="text-2xl font-bold text-gray-900 mt-4">Điền thông tin tham dự</h3>
@@ -220,8 +235,6 @@
 
           <!-- Form Đăng ký -->
           <form id="reg-form" class="hidden space-y-8">
-            
-            <!-- Floating Input Tên -->
             <div class="relative z-0 w-full group animate-slide-up-fade" style="animation-delay: 0.1s;">
               <input type="text" id="input-name" class="block py-3 px-0 w-full text-base text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none focus:outline-none focus:ring-0 focus:border-brand-primary peer transition-colors" placeholder=" " required />
               <label for="input-name" class="peer-focus:font-semibold absolute text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-brand-primary peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
@@ -229,7 +242,6 @@
               </label>
             </div>
 
-            <!-- Floating Input SĐT -->
             <div class="relative z-0 w-full group animate-slide-up-fade" style="animation-delay: 0.2s;">
               <input type="tel" id="input-phone" class="block py-3 px-0 w-full text-base text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none focus:outline-none focus:ring-0 focus:border-brand-primary peer transition-colors" placeholder=" " required />
               <label for="input-phone" class="peer-focus:font-semibold absolute text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-brand-primary peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
@@ -238,7 +250,6 @@
               <p id="phone-error" class="hidden absolute -bottom-6 left-0 text-red-500 text-xs font-medium"><i class="fa-solid fa-circle-exclamation"></i> SĐT cần đủ 10 số và bắt đầu bằng số 0.</p>
             </div>
 
-            <!-- Nút Submit sinh động -->
             <div class="pt-4 animate-slide-up-fade" style="animation-delay: 0.3s;">
               <button type="submit" id="btn-submit" class="w-full relative overflow-hidden group bg-gray-900 hover:bg-gray-800 text-white rounded-2xl py-4 px-6 font-semibold shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                 <div class="absolute inset-0 w-full h-full gradient-bg opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out z-0"></div>
@@ -250,11 +261,9 @@
                 </div>
               </button>
             </div>
-
           </form>
         </div>
       </div>
-
     </div>
   </main>
 
@@ -296,13 +305,46 @@
 
           if (res.status === 'success') {
             const data = res.data;
-            // Hiển thị Tên Chủ Đề dưới chữ Pride Talk
             document.getElementById('event-title').innerText = data.TenChuDe || 'Sự kiện đặc biệt';
             document.getElementById('event-desc').innerText = data.MoTa || '';
             document.getElementById('event-time').innerText = formatDate(data.NgayToChuc);
             document.getElementById('event-location').innerText = data.DiaDiem || 'Chưa xác định';
-            
             document.getElementById('event-reg-time').innerText = `${formatDate(data.DangKyTu)}\nđến\n${formatDate(data.DangKyDen)}`;
+
+            // --- XỬ LÝ LOGIC "XEM THÊM" CHO MÔ TẢ ---
+            setTimeout(() => {
+              const descEl = document.getElementById('event-desc');
+              const wrapper = document.getElementById('desc-wrapper');
+              const gradient = document.getElementById('desc-gradient');
+              const btn = document.getElementById('btn-read-more');
+              const textSpan = document.getElementById('read-more-text');
+              const icon = document.getElementById('read-more-icon');
+
+              // Chiều cao mặc định để thu gọn (tương đương max-height: 120px trong css)
+              const collapsedHeight = 120;
+              
+              if (descEl.offsetHeight > collapsedHeight) {
+                btn.classList.remove('hidden');
+                gradient.classList.remove('hidden');
+                
+                let isExpanded = false;
+                btn.addEventListener('click', () => {
+                  isExpanded = !isExpanded;
+                  if (isExpanded) {
+                    wrapper.style.maxHeight = descEl.offsetHeight + 50 + 'px';
+                    gradient.classList.add('opacity-0');
+                    textSpan.innerText = 'Thu gọn';
+                    icon.classList.add('rotate-180');
+                  } else {
+                    wrapper.style.maxHeight = collapsedHeight + 'px';
+                    gradient.classList.remove('opacity-0');
+                    textSpan.innerText = 'Xem thêm nội dung';
+                    icon.classList.remove('rotate-180');
+                  }
+                });
+              }
+            }, 100);
+            // ----------------------------------------
 
             const now = new Date().getTime();
             if (now >= data.DangKyTu && now <= data.DangKyDen) {
@@ -322,7 +364,7 @@
         });
     });
 
-    // Handle Form
+    // Handle Form Submit
     document.getElementById('reg-form').addEventListener('submit', (e) => {
       e.preventDefault();
       
@@ -330,7 +372,6 @@
       const phone = document.getElementById('input-phone').value.trim();
       const phoneError = document.getElementById('phone-error');
       
-      // Validation UI
       if (!validatePhone(phone)) {
         phoneError.classList.remove('hidden');
         document.getElementById('input-phone').classList.replace('border-gray-200', 'border-red-500');
@@ -345,7 +386,6 @@
       const btnText = document.getElementById('btn-text');
       const btnSpinner = document.getElementById('btn-spinner');
       
-      // Nút Load
       btnSubmit.disabled = true;
       btnText.innerText = 'Đang xử lý...';
       btnSpinner.classList.remove('hidden');
@@ -363,16 +403,13 @@
       .then(res => res.json())
       .then(res => {
         if(res.status === 'success') {
-          // Hide form, show success
           const formEl = document.getElementById('reg-form');
           formEl.style.opacity = 0;
-          
           setTimeout(() => {
             formEl.classList.add('hidden');
             const successEl = document.getElementById('status-success');
             successEl.classList.remove('hidden');
             successEl.classList.add('animate-slide-up-fade');
-            
             document.getElementById('success-name').innerText = name;
             document.getElementById('success-phone').innerText = phone;
           }, 300);
