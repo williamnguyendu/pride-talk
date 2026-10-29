@@ -13,7 +13,7 @@ function doGet(e) {
 function doPost(e) {
   if (e.parameter.action === 'register') {
     try {
-      const sheet = SpreadsheetApp.openById(SHEET_ID).getSheetByName("CongDangKyPrideTalk");
+      const sheet = SpreadsheetApp.openById(SHEET_ID).getSheetByName("DangKyPrideTalk");
       if (!sheet) {
         return ContentService.createTextOutput(JSON.stringify({ status: 'error', message: 'Không tìm thấy Sheet lưu đăng ký.' }))
           .setMimeType(ContentService.MimeType.JSON);
@@ -22,12 +22,15 @@ function doPost(e) {
       const hoVaTen = e.parameter.HoVaTen;
       const soDienThoai = e.parameter.SoDienThoai;
       
+      // Thêm dấu nháy đơn vào trước số điện thoại để Google Sheets hiểu là Text (giữ nguyên số 0)
+      const safePhone = "'" + soDienThoai;
+      
       // Lấy thời gian hiện tại
       const time = new Date();
       const formattedTime = Utilities.formatDate(time, "GMT+7", "dd/MM/yyyy HH:mm:ss");
 
       // Lưu vào sheet CongDangKyPrideTalk
-      sheet.appendRow([formattedTime, hoVaTen, soDienThoai]);
+      sheet.appendRow([formattedTime, hoVaTen, safePhone]);
 
       return ContentService.createTextOutput(JSON.stringify({ status: 'success' }))
         .setMimeType(ContentService.MimeType.JSON);

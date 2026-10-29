@@ -4,134 +4,306 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Đăng ký tham gia Pride Talk</title>
+  
+  <!-- Font Poppins (Tươi trẻ, hiện đại) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['"Poppins"', 'sans-serif'] },
+          colors: {
+            brand: { light: '#fdf4ff', primary: '#d946ef', secondary: '#8b5cf6', dark: '#4a044e' }
+          },
+          animation: {
+            'slide-up-fade': 'slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+            'float': 'float 4s ease-in-out infinite',
+            'float-shadow': 'floatShadow 4s ease-in-out infinite',
+            'blob': 'blob 7s infinite',
+            'heart-beat': 'heartBeat 1.5s ease-in-out infinite',
+          },
+          keyframes: {
+            slideUpFade: {
+              '0%': { opacity: '0', transform: 'translateY(30px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            },
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-15px)' },
+            },
+            floatShadow: {
+              '0%, 100%': { transform: 'scale(1)', opacity: '0.4' },
+              '50%': { transform: 'scale(0.8)', opacity: '0.1' },
+            },
+            heartBeat: {
+              '0%, 100%': { transform: 'scale(1)' },
+              '50%': { transform: 'scale(1.2)' },
+            },
+            blob: {
+              '0%': { transform: 'translate(0px, 0px) scale(1)' },
+              '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+              '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+              '100%': { transform: 'translate(0px, 0px) scale(1)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
   <style>
-    .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-    .loader-spinner { border-top-color: #764ba2; animation: spinner 1s linear infinite; }
-    @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    body { background-color: #fafaf9; overflow-x: hidden; }
+    .gradient-text {
+      background: linear-gradient(135deg, #8b5cf6 0%, #d946ef 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .gradient-bg {
+      background: linear-gradient(135deg, #8b5cf6 0%, #d946ef 100%);
+    }
+    
+    /* Animation cho Checkmark Success */
+    .checkmark { stroke-dasharray: 166; stroke-dashoffset: 166; stroke-width: 2; stroke-miterlimit: 10; stroke: #22c55e; fill: none; animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards; }
+    .checkmark-circle { stroke-dasharray: 166; stroke-dashoffset: 166; stroke-width: 2; stroke-miterlimit: 10; stroke: #22c55e; fill: none; animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards; animation-delay: 0.2s;}
+    @keyframes stroke { 100% { stroke-dashoffset: 0; } }
   </style>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col">
+<body class="text-gray-800 antialiased flex flex-col min-h-screen relative">
 
-  <!-- Vùng Loading Animation -->
-  <div id="loading" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white">
-    <div class="loader-spinner border-4 border-gray-200 rounded-full w-12 h-12 mb-4"></div>
-    <p class="text-gray-600 font-medium">Đang tải dữ liệu sự kiện...</p>
+  <!-- Background trang trí sinh động -->
+  <div class="fixed top-0 left-0 w-full h-96 bg-gradient-to-br from-brand-light to-white -z-10"></div>
+  <div class="fixed top-[-10%] right-[-5%] w-96 h-96 bg-fuchsia-300 rounded-full mix-blend-multiply filter blur-[100px] opacity-30 animate-blob pointer-events-none"></div>
+  <div class="fixed top-[20%] left-[-10%] w-96 h-96 bg-violet-300 rounded-full mix-blend-multiply filter blur-[100px] opacity-30 animate-blob animation-delay-2000 pointer-events-none"></div>
+
+  <!-- Loading Overlay -->
+  <div id="loading" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white/80 backdrop-blur-md transition-opacity duration-500">
+    <div class="relative w-20 h-20">
+      <div class="absolute inset-0 border-4 border-brand-light rounded-full"></div>
+      <div class="absolute inset-0 border-4 border-t-brand-primary rounded-full animate-spin"></div>
+      <i class="fa-solid fa-microphone-lines absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-brand-primary text-xl animate-pulse"></i>
+    </div>
+    <p class="mt-4 font-medium text-brand-secondary tracking-wide">Đang chuẩn bị sự kiện...</p>
   </div>
 
-  <!-- Vùng Nội Dung Chính -->
-  <main id="main-content" class="flex-grow hidden">
-    <!-- Hero Banner -->
-    <header class="gradient-bg text-white py-16 px-4 text-center rounded-b-3xl shadow-lg">
-      <div class="max-w-3xl mx-auto">
-        <h1 id="event-title" class="text-3xl md:text-5xl font-bold mb-4">Pride Talk</h1>
-        <p id="event-desc" class="text-lg md:text-xl opacity-90 leading-relaxed"></p>
+  <main id="main-content" class="flex-grow hidden w-full max-w-6xl mx-auto px-4 sm:px-6 py-12">
+    
+    <!-- Header -->
+    <header class="text-center mb-14 animate-slide-up-fade">
+      <div class="inline-flex items-center justify-center px-4 py-1.5 mb-5 rounded-full bg-white border border-fuchsia-100 shadow-sm">
+        <span class="flex w-2 h-2 rounded-full bg-brand-primary mr-2 animate-pulse"></span>
+        <span class="text-xs font-semibold text-brand-primary tracking-wider uppercase">Sự kiện đang mở đăng ký</span>
       </div>
+      
+      <h1 class="text-4xl md:text-5xl font-extrabold mb-2 tracking-tight text-gray-900 drop-shadow-sm">
+        Pride <span class="gradient-text">Talk</span>
+      </h1>
+      
+      <!-- Bổ sung hiển thị Tên Chủ Đề -->
+      <h2 id="event-title" class="text-2xl md:text-4xl font-bold text-gray-700 mb-5 leading-tight px-4"></h2>
+      
+      <p id="event-desc" class="text-gray-500 text-lg max-w-2xl mx-auto font-light leading-relaxed"></p>
     </header>
 
-    <div class="max-w-4xl mx-auto px-4 -mt-10 mb-12">
-      <!-- Info Boxes -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <div class="bg-white p-5 rounded-xl shadow text-center">
-          <i class="fa-regular fa-clock text-3xl text-purple-600 mb-2"></i>
-          <h3 class="font-semibold text-gray-500 text-sm uppercase">Thời gian tổ chức</h3>
-          <p id="event-time" class="font-bold text-gray-800 mt-1"></p>
-        </div>
-        <div class="bg-white p-5 rounded-xl shadow text-center">
-          <i class="fa-solid fa-location-dot text-3xl text-pink-600 mb-2"></i>
-          <h3 class="font-semibold text-gray-500 text-sm uppercase">Địa điểm</h3>
-          <p id="event-location" class="font-bold text-gray-800 mt-1"></p>
-        </div>
-        <div class="bg-white p-5 rounded-xl shadow text-center">
-          <i class="fa-regular fa-calendar-check text-3xl text-blue-600 mb-2"></i>
-          <h3 class="font-semibold text-gray-500 text-sm uppercase">Thời gian đăng ký</h3>
-          <p id="event-reg-time" class="font-bold text-gray-800 mt-1 text-sm"></p>
+    <!-- Cards Thông tin -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+      <div class="bg-white rounded-2xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(217,70,239,0.1)] transition-all duration-300 animate-slide-up-fade group" style="animation-delay: 0.1s;">
+        <div class="w-12 h-12 bg-violet-50 text-brand-secondary rounded-xl flex items-center justify-center mb-4 text-xl group-hover:scale-110 transition-transform"><i class="fa-regular fa-clock"></i></div>
+        <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Thời gian tổ chức</h3>
+        <p id="event-time" class="font-semibold text-gray-800"></p>
+      </div>
+
+      <div class="bg-white rounded-2xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(217,70,239,0.1)] transition-all duration-300 animate-slide-up-fade group" style="animation-delay: 0.2s;">
+        <div class="w-12 h-12 bg-fuchsia-50 text-brand-primary rounded-xl flex items-center justify-center mb-4 text-xl group-hover:scale-110 transition-transform"><i class="fa-solid fa-location-dot"></i></div>
+        <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Địa điểm</h3>
+        <p id="event-location" class="font-semibold text-gray-800"></p>
+      </div>
+
+      <div class="bg-white rounded-2xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(217,70,239,0.1)] transition-all duration-300 animate-slide-up-fade group" style="animation-delay: 0.3s;">
+        <div class="w-12 h-12 bg-pink-50 text-pink-500 rounded-xl flex items-center justify-center mb-4 text-xl group-hover:scale-110 transition-transform"><i class="fa-regular fa-calendar-check"></i></div>
+        <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Thời gian đăng ký</h3>
+        <p id="event-reg-time" class="font-semibold text-gray-800 whitespace-pre-line"></p>
+      </div>
+    </div>
+
+    <!-- Vùng Main Form -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 animate-slide-up-fade" style="animation-delay: 0.4s;">
+      
+      <!-- Cột Lưu ý (Đảo sang trái) -->
+      <div class="lg:col-span-5 order-2 lg:order-1 flex flex-col justify-center">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+          <i class="fa-solid fa-sparkles text-brand-primary mr-2"></i> Lưu ý từ Ban tổ chức
+        </h2>
+        
+        <div class="space-y-6">
+          <div class="flex items-start bg-white p-5 rounded-2xl shadow-sm border border-gray-100 hover:border-fuchsia-200 transition-colors">
+            <div class="w-10 h-10 shrink-0 bg-brand-light rounded-full flex items-center justify-center text-brand-primary mt-0.5"><i class="fa-solid fa-users"></i></div>
+            <div class="ml-4">
+              <h4 class="font-semibold text-gray-900 mb-1">Thành viên Pride Home</h4>
+              <p class="text-sm text-gray-600">BTC chỉ duyệt đăng ký với thành viên cộng đồng. Liên hệ <a href="https://zalo.me/0987500533" target="_blank" class="font-semibold text-brand-secondary hover:underline">Zalo 0987.500.533</a> nếu bạn chưa tham gia.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start bg-white p-5 rounded-2xl shadow-sm border border-gray-100 hover:border-fuchsia-200 transition-colors">
+            <div class="w-10 h-10 shrink-0 bg-brand-light rounded-full flex items-center justify-center text-brand-primary mt-0.5"><i class="fa-solid fa-camera"></i></div>
+            <div class="ml-4">
+              <h4 class="font-semibold text-gray-900 mb-1">Hình ảnh sự kiện</h4>
+              <p class="text-sm text-gray-600">Việc đăng ký đồng nghĩa bạn đồng ý cho Pride Talk sử dụng hình ảnh cho mục đích truyền thông.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start bg-white p-5 rounded-2xl shadow-sm border border-gray-100 hover:border-fuchsia-200 transition-colors">
+            <div class="w-10 h-10 shrink-0 bg-brand-light rounded-full flex items-center justify-center text-brand-primary mt-0.5"><i class="fa-solid fa-id-badge"></i></div>
+            <div class="ml-4">
+              <h4 class="font-semibold text-gray-900 mb-1">Khu vực Private Area</h4>
+              <p class="text-sm text-gray-600">Khu vực tổ chức riêng biệt <strong>chỉ dành cho khách mời</strong> đã có xác nhận đăng ký thành công.</p>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Khu vực Đăng ký -->
-      <div class="bg-white rounded-2xl shadow-xl overflow-hidden mb-8">
-        <div class="p-6 md:p-8">
-          <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b pb-2">Đăng ký tham gia</h2>
+      <!-- Cột Form (Bên phải) -->
+      <div class="lg:col-span-7 order-1 lg:order-2">
+        <div class="bg-white rounded-3xl p-8 md:p-10 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] relative overflow-hidden">
           
-          <!-- Trạng thái: Hết hạn / Chưa mở -->
-          <div id="status-closed" class="hidden bg-red-50 text-red-600 p-4 rounded-lg text-center font-medium">
-            <i class="fa-solid fa-circle-exclamation mr-2"></i> Cổng đăng ký chưa mở hoặc đã hết thời gian đăng ký, vui lòng liên hệ <a href="tel:0987500533" class="font-bold underline">0987.500.533</a> để được hỗ trợ.
+          <!-- Họa tiết góc Form -->
+          <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-brand-light to-transparent rounded-bl-full pointer-events-none"></div>
+
+          <!-- ANIMATION DỄ THƯƠNG (Hoạt ảnh nổi bật ở đầu form) -->
+          <div class="flex flex-col items-center justify-center mb-8">
+            <div class="relative">
+              <!-- Khối bong bóng bay lơ lửng -->
+              <div class="w-20 h-20 bg-fuchsia-50 rounded-full flex items-center justify-center relative shadow-sm border-2 border-white animate-float z-10">
+                <i class="fa-solid fa-comments text-4xl text-brand-secondary"></i>
+                <!-- Trái tim đập -->
+                <i class="fa-solid fa-heart absolute -top-1 -right-2 text-2xl text-pink-500 animate-heart-beat"></i>
+                <!-- Ngôi sao xoay -->
+                <i class="fa-solid fa-sparkles absolute -bottom-1 -left-2 text-xl text-yellow-400 animate-[spin_4s_linear_infinite]"></i>
+              </div>
+              <!-- Bóng mờ chuyển động theo -->
+              <div class="w-12 h-2 bg-gray-200 rounded-[100%] mx-auto mt-4 animate-float-shadow"></div>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 mt-4">Điền thông tin tham dự</h3>
           </div>
 
-          <!-- Trạng thái: Thành công -->
-          <div id="status-success" class="hidden text-center py-8">
-            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 text-green-500 mb-4">
-              <i class="fa-solid fa-check text-3xl"></i>
+          <!-- Form bị đóng -->
+          <div id="status-closed" class="hidden text-center py-4">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-50 text-red-500 mb-4 animate-float">
+              <i class="fa-solid fa-door-closed text-2xl"></i>
             </div>
-            <h3 class="text-xl font-bold text-gray-800 mb-2">Đăng ký thành công!</h3>
-            <p class="text-gray-600">Với các thông tin đã nhập: <b id="success-name"></b> - <b id="success-phone"></b></p>
-            <p class="text-gray-600 mt-2">Chờ BTC phê duyệt, BTC sẽ gửi xác nhận qua Zalo theo số điện thoại đã đăng ký.</p>
-            <p class="text-gray-600 mt-2">Cần hỗ trợ vui lòng liên hệ <a href="tel:0987500533" class="font-bold text-purple-600">0987.500.533</a>.</p>
+            <h4 class="text-xl font-bold text-gray-900 mb-2">Đã đóng đăng ký</h4>
+            <p class="text-gray-500">Rất tiếc, sự kiện hiện chưa mở hoặc đã hết hạn đăng ký.<br>Vui lòng gọi <a href="tel:0987500533" class="font-semibold text-brand-primary hover:underline">0987.500.533</a> để được hỗ trợ.</p>
           </div>
 
-          <!-- Trạng thái: Form Đăng ký -->
-          <form id="reg-form" class="hidden space-y-5">
-            <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-1">Họ và tên *</label>
-              <input type="text" id="input-name" required placeholder="Nhập họ và tên của bạn" class="w-full px-4 py-3 rounded-lg border focus:ring-2 focus:ring-purple-500 outline-none transition">
+          <!-- Đăng ký thành công -->
+          <div id="status-success" class="hidden text-center py-4">
+            <svg class="w-20 h-20 mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+              <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
+              <path class="checkmark" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+            </svg>
+            <h4 class="text-2xl font-bold text-gray-900 mb-2">Tuyệt vời!</h4>
+            <p class="text-gray-500 mb-6">Bạn đã gửi thông tin thành công.</p>
+            
+            <div class="bg-gray-50 rounded-2xl p-5 text-left mb-6 border border-gray-100">
+              <p class="text-sm text-gray-500 mb-1">Khách mời: <span id="success-name" class="font-semibold text-gray-900 ml-1"></span></p>
+              <p class="text-sm text-gray-500">Số điện thoại: <span id="success-phone" class="font-semibold text-gray-900 ml-1"></span></p>
             </div>
-            <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-1">Số điện thoại (có dùng Zalo) *</label>
-              <input type="tel" id="input-phone" required placeholder="Nhập số điện thoại" class="w-full px-4 py-3 rounded-lg border focus:ring-2 focus:ring-purple-500 outline-none transition">
+            
+            <p class="text-sm text-gray-500 bg-brand-light p-4 rounded-xl text-brand-dark">
+              <i class="fa-solid fa-bell mr-2"></i>BTC sẽ gửi xác nhận phê duyệt qua Zalo. Hotline hỗ trợ: <strong>0987.500.533</strong>
+            </p>
+          </div>
+
+          <!-- Form Đăng ký -->
+          <form id="reg-form" class="hidden space-y-8">
+            
+            <!-- Floating Input Tên -->
+            <div class="relative z-0 w-full group animate-slide-up-fade" style="animation-delay: 0.1s;">
+              <input type="text" id="input-name" class="block py-3 px-0 w-full text-base text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none focus:outline-none focus:ring-0 focus:border-brand-primary peer transition-colors" placeholder=" " required />
+              <label for="input-name" class="peer-focus:font-semibold absolute text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-brand-primary peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                Họ và tên của bạn <span class="text-red-500">*</span>
+              </label>
             </div>
-            <button type="submit" id="btn-submit" class="w-full gradient-bg text-white font-bold py-3 px-4 rounded-lg hover:opacity-90 transition shadow-lg flex justify-center items-center">
-              <span>Đăng ký ngay</span>
-            </button>
+
+            <!-- Floating Input SĐT -->
+            <div class="relative z-0 w-full group animate-slide-up-fade" style="animation-delay: 0.2s;">
+              <input type="tel" id="input-phone" class="block py-3 px-0 w-full text-base text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none focus:outline-none focus:ring-0 focus:border-brand-primary peer transition-colors" placeholder=" " required />
+              <label for="input-phone" class="peer-focus:font-semibold absolute text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-brand-primary peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                Số điện thoại (Có dùng Zalo) <span class="text-red-500">*</span>
+              </label>
+              <p id="phone-error" class="hidden absolute -bottom-6 left-0 text-red-500 text-xs font-medium"><i class="fa-solid fa-circle-exclamation"></i> SĐT cần đủ 10 số và bắt đầu bằng số 0.</p>
+            </div>
+
+            <!-- Nút Submit sinh động -->
+            <div class="pt-4 animate-slide-up-fade" style="animation-delay: 0.3s;">
+              <button type="submit" id="btn-submit" class="w-full relative overflow-hidden group bg-gray-900 hover:bg-gray-800 text-white rounded-2xl py-4 px-6 font-semibold shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                <div class="absolute inset-0 w-full h-full gradient-bg opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out z-0"></div>
+                <div class="relative z-10 flex items-center justify-center">
+                  <span id="btn-text">Gửi thông tin đăng ký <i class="fa-solid fa-paper-plane ml-2 group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform duration-300"></i></span>
+                  <div id="btn-spinner" class="hidden ml-2">
+                    <i class="fa-solid fa-circle-notch fa-spin text-xl"></i>
+                  </div>
+                </div>
+              </button>
+            </div>
+
           </form>
         </div>
       </div>
 
-      <!-- Lưu ý -->
-      <div class="bg-blue-50 border border-blue-100 p-6 rounded-xl">
-        <h3 class="font-bold text-blue-800 mb-3"><i class="fa-solid fa-circle-info mr-2"></i>Lưu ý từ Ban Tổ Chức:</h3>
-        <ul class="list-disc pl-5 text-blue-900 space-y-2 text-sm">
-          <li>BTC chỉ duyệt đăng ký khi bạn là thành viên của Cộng đồng Pride Home. Nếu chưa là thành viên vui lòng liên hệ <a href="https://zalo.me/0987500533" target="_blank" class="font-bold underline">0987.500.533 (Zalo)</a>.</li>
-          <li>Đồng ý cho Pride Talk sử dụng hình ảnh cho mục đích truyền thông.</li>
-          <li>Khu vực tổ chức riêng biệt (Private Area) chỉ dành cho khách đã đăng ký.</li>
-        </ul>
-      </div>
     </div>
   </main>
 
-  <footer class="bg-gray-800 text-gray-300 py-6 text-center mt-auto">
-    <p class="text-sm">Pride Talk là một trong các hoạt động được tổ chức bởi <a href="https://www.pridehome.vn" target="_blank" class="font-bold text-white hover:text-purple-400 transition">Pride Home.</a></p>
+  <footer class="text-center py-8 mt-auto z-10 border-t border-gray-200 bg-white/50 backdrop-blur-sm">
+    <p class="text-sm text-gray-500 font-medium">
+      Pride Talk là một hoạt động thuộc 
+      <a href="https://www.pridehome.vn" target="_blank" class="text-gray-900 font-bold hover:text-brand-primary transition-colors">Pride Home</a>.
+    </p>
   </footer>
 
   <script>
     // BẠN HÃY THAY ĐƯỜNG LINK WEB APP VÀO ĐÂY
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwtDPl78bS-yzHwK3oMlDARuXlQ9_Ugaoy3qngcmr_561ppv4UJEgffU8tos517_dc/exec"; 
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxd7kHD9w9GgXcWBCFsbDVMu5hN7gPRSvR1qPQr3LB2_2c4UJzdZHGfCgdNqOVodBGN/exec"; 
     
-    // Helpers format thời gian
+    // Format thời gian
     const formatDate = (ms) => {
       if(!ms) return "Chưa xác định";
       const d = new Date(ms);
-      return d.toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'}) + ' - ' + d.toLocaleDateString('vi-VN');
+      const time = d.toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'});
+      const date = d.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+      return `${time} ngày ${date}`;
     }
 
-    // Logic Tải Dữ liệu
+    // Check SĐT
+    const validatePhone = (phone) => {
+      const regex = /^(03|05|07|08|09)[0-9]{8}$/;
+      return regex.test(phone);
+    };
+
     document.addEventListener("DOMContentLoaded", () => {
       fetch(SCRIPT_URL + "?action=getEventInfo")
         .then(res => res.json())
         .then(res => {
-          document.getElementById('loading').classList.add('hidden');
+          const loader = document.getElementById('loading');
+          loader.style.opacity = '0';
+          setTimeout(() => { loader.style.display = 'none'; }, 500);
+          
           document.getElementById('main-content').classList.remove('hidden');
 
           if (res.status === 'success') {
             const data = res.data;
-            document.getElementById('event-title').innerText = data.TenChuDe || 'Pride Talk';
+            // Hiển thị Tên Chủ Đề dưới chữ Pride Talk
+            document.getElementById('event-title').innerText = data.TenChuDe || 'Sự kiện đặc biệt';
             document.getElementById('event-desc').innerText = data.MoTa || '';
             document.getElementById('event-time').innerText = formatDate(data.NgayToChuc);
             document.getElementById('event-location').innerText = data.DiaDiem || 'Chưa xác định';
-            document.getElementById('event-reg-time').innerText = `${formatDate(data.DangKyTu)} \nđến\n ${formatDate(data.DangKyDen)}`;
+            
+            document.getElementById('event-reg-time').innerText = `${formatDate(data.DangKyTu)}\nđến\n${formatDate(data.DangKyDen)}`;
 
-            // Kiểm tra thời gian
             const now = new Date().getTime();
             if (now >= data.DangKyTu && now <= data.DangKyDen) {
               document.getElementById('reg-form').classList.remove('hidden');
@@ -139,29 +311,44 @@
               document.getElementById('status-closed').classList.remove('hidden');
             }
           } else {
-             // Không có event nào đang mở
              document.getElementById('status-closed').classList.remove('hidden');
-             document.getElementById('event-title').innerText = 'Pride Talk';
+             document.getElementById('event-title').innerText = 'Chưa có sự kiện nào';
              document.getElementById('event-desc').innerText = 'Hiện chưa có sự kiện nào mở đăng ký.';
           }
         })
         .catch(err => {
           console.error(err);
-          document.getElementById('loading').classList.add('hidden');
-          alert("Lỗi kết nối đến Server, vui lòng thử lại sau.");
+          document.getElementById('loading').innerHTML = '<p class="text-red-500 font-semibold">Lỗi tải dữ liệu. Vui lòng F5 tải lại trang.</p>';
         });
     });
 
-    // Logic Submit Form
+    // Handle Form
     document.getElementById('reg-form').addEventListener('submit', (e) => {
       e.preventDefault();
       
-      const name = document.getElementById('input-name').value;
-      const phone = document.getElementById('input-phone').value;
-      const btnSubmit = document.getElementById('btn-submit');
+      const name = document.getElementById('input-name').value.trim();
+      const phone = document.getElementById('input-phone').value.trim();
+      const phoneError = document.getElementById('phone-error');
       
-      btnSubmit.innerHTML = '<div class="loader-spinner border-2 border-white rounded-full w-5 h-5 mr-2"></div> Đang xử lý...';
+      // Validation UI
+      if (!validatePhone(phone)) {
+        phoneError.classList.remove('hidden');
+        document.getElementById('input-phone').classList.replace('border-gray-200', 'border-red-500');
+        document.getElementById('input-phone').focus();
+        return;
+      } else {
+        phoneError.classList.add('hidden');
+        document.getElementById('input-phone').classList.replace('border-red-500', 'border-gray-200');
+      }
+
+      const btnSubmit = document.getElementById('btn-submit');
+      const btnText = document.getElementById('btn-text');
+      const btnSpinner = document.getElementById('btn-spinner');
+      
+      // Nút Load
       btnSubmit.disabled = true;
+      btnText.innerText = 'Đang xử lý...';
+      btnSpinner.classList.remove('hidden');
 
       const formData = new URLSearchParams();
       formData.append('action', 'register');
@@ -170,29 +357,40 @@
 
       fetch(SCRIPT_URL, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: formData
       })
       .then(res => res.json())
       .then(res => {
         if(res.status === 'success') {
-          document.getElementById('reg-form').classList.add('hidden');
-          document.getElementById('status-success').classList.remove('hidden');
-          document.getElementById('success-name').innerText = name;
-          document.getElementById('success-phone').innerText = phone;
+          // Hide form, show success
+          const formEl = document.getElementById('reg-form');
+          formEl.style.opacity = 0;
+          
+          setTimeout(() => {
+            formEl.classList.add('hidden');
+            const successEl = document.getElementById('status-success');
+            successEl.classList.remove('hidden');
+            successEl.classList.add('animate-slide-up-fade');
+            
+            document.getElementById('success-name').innerText = name;
+            document.getElementById('success-phone').innerText = phone;
+          }, 300);
         } else {
-          alert("Lỗi: " + res.message);
-          btnSubmit.innerHTML = 'Đăng ký ngay';
-          btnSubmit.disabled = false;
+          alert("Lỗi từ hệ thống: " + res.message);
+          resetBtn();
         }
       })
       .catch(err => {
-        alert("Lỗi đường truyền, vui lòng thử lại.");
-        btnSubmit.innerHTML = 'Đăng ký ngay';
-        btnSubmit.disabled = false;
+        alert("Lỗi mạng, vui lòng thử lại.");
+        resetBtn();
       });
+
+      function resetBtn() {
+        btnSubmit.disabled = false;
+        btnText.innerHTML = 'Gửi thông tin đăng ký <i class="fa-solid fa-paper-plane ml-2"></i>';
+        btnSpinner.classList.add('hidden');
+      }
     });
   </script>
 </body>
