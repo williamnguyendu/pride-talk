@@ -28,9 +28,12 @@ function doPost(e) {
       // Lấy thời gian hiện tại
       const time = new Date();
       const formattedTime = Utilities.formatDate(time, "GMT+7", "dd/MM/yyyy HH:mm:ss");
+      
+      // Thêm dấu nháy đơn vào trước thời gian để Google Sheets hiểu là Text (plain text)
+      const safeTime = "'" + formattedTime;
 
       // Lưu vào sheet CongDangKyPrideTalk
-      sheet.appendRow([formattedTime, hoVaTen, safePhone]);
+      sheet.appendRow([safeTime, hoVaTen, safePhone]);
 
       return ContentService.createTextOutput(JSON.stringify({ status: 'success' }))
         .setMimeType(ContentService.MimeType.JSON);
